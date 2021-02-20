@@ -6,7 +6,7 @@ import java.util.List;
 
 public class IceNetwork<T extends IceState<T>> {
     private final List<IceNode<T>> nodes;
-    private final T currentState;
+    private T currentState;
     private final T intendedState;
 
     public IceNetwork(List<IceNode<T>> nodes, T initialState, T intendedState) {
@@ -21,4 +21,30 @@ public class IceNetwork<T extends IceState<T>> {
             System.out.println("   "+node.getName()+": "+node.evaluateConsequences(currentState, intendedState)+"   ->   "+node.predictAction(currentState));
         }
     }
+    public void runGreedyAlgorithm() {
+        System.out.println("Start: "+currentState+"  |  "+currentState.distance(intendedState));
+
+        while(currentState.distance(intendedState)>0) {
+            double maxChange = 0;
+            IceNode<T> maxNode = null;
+
+            for(IceNode<T> node : nodes) {
+                double thisChange = node.evaluateConsequences(currentState, intendedState);
+                if(thisChange > maxChange) {
+                    maxChange = thisChange;
+                    maxNode = node;
+                }
+            }
+
+            if(maxChange == 0) {
+                System.out.println("Impossible task!");
+                break;
+            }
+
+            currentState = maxNode.predictAction(currentState);
+            System.out.println(maxNode.getName()+": "+currentState+"  |  "+currentState.distance(intendedState));
+
+        }
+    }
+
 }

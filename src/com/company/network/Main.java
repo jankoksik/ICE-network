@@ -24,9 +24,9 @@ public class Main {
         }
 
         IceState_Tiles startState = new IceState_Tiles(0,1,0,0,0,0,0,1,0);
-        IceState_Tiles endState = new IceState_Tiles(1,1,1,1,1,1,1,1,1);
+        IceState_Tiles endState = new IceState_Tiles(1,0,1,0,1,1,1,0,1);
         IceNetwork<IceState_Tiles> brain = new IceNetwork<>(nodes, startState, endState);
 
-        brain.displayPossibleActions();
+        brain.runGreedyAlgorithm();
     }
 }
