@@ -1,5 +1,6 @@
 import socket
 import json
+import time
 
 HOST = '127.0.0.1'
 PORT = 65530
@@ -47,9 +48,9 @@ g = Game(9)
 while True:
     conn, addr = s.accept()
     from_client = ''
-    data = conn.recv(4096)
+    data = conn.recv(4096).decode('utf-8')
     if data:
-        data = json.loads(data)
+        data = json.loads(data[2:])
 
         response = ""
         for p in data['pkg']:
@@ -66,8 +67,7 @@ while True:
             elif (p['action'] == "GetSteps"):
                 response = PackData(g.GetSteps())
 
-
-    conn.send(response.encode('utf-8'))
+        conn.send(response.encode('utf-8'))
     conn.close()
     print ('client disconnected')
 

@@ -21,26 +21,27 @@ public class Api {
         System.out.println("sending ...");
         dataOutputStream.writeUTF(jso.toJSONString());
         dataOutputStream.flush();
-        dataOutputStream.close();
         System.out.println("send : " + jso.toJSONString());
         //recv
         InputStream inputStream = sc.getInputStream();
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-        String message = dataInputStream.readUTF();
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(inputStream));
+        String message = in.readLine();
         //convert to json object
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(message);
         //close
-        System.out.println("recived : "+ json.toJSONString());
+        System.out.println("received : "+ json.toJSONString());
+        dataOutputStream.close();
         sc.close();
         return json;
     }
 
     public static void main(String [] args) throws Exception {
-        String testJson = "{\"pkg\": [{ \"action\" : \"Put\", \"number\" : 3 }] }";
         JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(testJson);
-        SendnRecv(json);
+        SendnRecv((JSONObject) parser.parse("{\"pkg\": [{ \"action\" : \"Put\", \"number\" : 3 }] }"));
+        SendnRecv((JSONObject) parser.parse("{\"pkg\": [{ \"action\" : \"GetState\"}] }"));
 
     }
 
