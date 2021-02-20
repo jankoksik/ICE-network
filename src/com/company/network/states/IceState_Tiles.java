@@ -2,11 +2,12 @@ package com.company.network.states;
 
 import com.company.network.IceState;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class IceState_Tiles extends IceState<IceState_Tiles> {
-    private List<Integer> tileStates;
+    public List<Integer> tileStates;
 
     public IceState_Tiles(Integer... tiles) {
         tileStates = Arrays.asList(tiles);
@@ -28,5 +29,11 @@ public class IceState_Tiles extends IceState<IceState_Tiles> {
     @Override
     public String toString() {
         return tileStates.toString();
+    }
+
+    public IceState_Tiles clone() {
+        Integer[] listClone = new Integer[tileStates.size()];
+        for(int i=0;i< tileStates.size();i++) listClone[i] = tileStates.get(i);
+        return new IceState_Tiles(listClone);
     }
 }

@@ -5,4 +5,6 @@ public abstract class IceState<T extends IceState<T>> {
     public static <U extends IceState<U>> double distance(U stateBefore, U stateAfter) {
         return stateBefore.distance(stateAfter);
     }
+
+    public abstract T clone();
 }
