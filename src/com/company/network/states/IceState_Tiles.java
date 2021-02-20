@@ -24,4 +24,9 @@ public class IceState_Tiles extends IceState<IceState_Tiles> {
 
         return differenceCounter/length;
     }
+
+    @Override
+    public String toString() {
+        return tileStates.toString();
+    }
 }

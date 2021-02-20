@@ -2,12 +2,23 @@ package com.company.network;
 
 import com.company.network.states.IceState_Tiles;
 
-public class IceNetwork {
-    public static void main(String [] args) {
-        IceState_Tiles state1 = new IceState_Tiles(0,0,0,0,1,0,0,0,0);
-        IceState_Tiles state2 = new IceState_Tiles(1,0,1,0,1,0,1,0,1);
-        System.out.println(state1.distance(state2));
-        System.out.println(state2.distance(state1));
-        System.out.println(IceState.distance(state1, state2));
+import java.util.List;
+
+public class IceNetwork<T extends IceState<T>> {
+    private final List<IceNode<T>> nodes;
+    private final T currentState;
+    private final T intendedState;
+
+    public IceNetwork(List<IceNode<T>> nodes, T initialState, T intendedState) {
+        this.nodes = nodes;
+        this.currentState = initialState;
+        this.intendedState = intendedState;
+    }
+
+    public void displayPossibleActions() {
+        System.out.println("Distance: "+intendedState.distance(currentState)+"  "+currentState);
+        for(IceNode<T> node : nodes) {
+            System.out.println("   "+node.getName()+": "+node.evaluateConsequences(currentState, intendedState)+"   ->   "+node.predictAction(currentState));
+        }
     }
 }
