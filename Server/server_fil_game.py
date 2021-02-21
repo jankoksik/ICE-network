@@ -1,6 +1,6 @@
 import socket
 import json
-import time
+import codecs
 
 HOST = '127.0.0.1'
 PORT = 65530
@@ -46,30 +46,32 @@ s.bind((HOST,PORT))
 s.listen(10)
 g = Game(9)
 while True:
-    conn, addr = s.accept()
-    from_client = ''
-    data = conn.recv(4096).decode('utf-8')
-    if data:
-        data = json.loads(data[2:])
-
-        response = ""
-        for p in data['pkg']:
-            print("client action :   " + p["action"])
-            if(p['action'] == "Put"):
-                g.Color(int(p["number"]))
-                response = PackData("done")
-            elif (p['action'] == "Reset"):
-                g.Reset()
-                response = PackData("done")
-            elif (p['action'] == "GetState"):
-                response = PackData(g.GetList())
-                print(response)
-            elif (p['action'] == "GetSteps"):
-                response = PackData(g.GetSteps())
-
+    try:
+        conn, addr = s.accept()
+        data = conn.recv(4096).decode('utf-8')
+        if data:
+            data = json.loads(data[2:])
+            response = ""
+            for p in data['pkg']:
+                print("client action :   " + p["action"])
+                if(p['action'] == "Put"):
+                    g.Color(int(p["number"]))
+                    response = PackData("done")
+                elif (p['action'] == "Reset"):
+                    g.Reset()
+                    response = PackData("done")
+                elif (p['action'] == "GetState"):
+                    response = PackData(g.GetList())
+                    print(response)
+                elif (p['action'] == "GetSteps"):
+                    response = PackData(g.GetSteps())
         conn.send(response.encode('utf-8'))
-    conn.close()
-    print ('client disconnected')
+        conn.close()
+        print ('client disconnected')
+    except:
+        print("something went wrong... closing connection with client")
+        conn.close()
+
 
 
 
